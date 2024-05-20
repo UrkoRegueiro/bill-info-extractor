@@ -12,30 +12,31 @@ from kor.extraction import create_extraction_chain
 
 
 def bill_cleaner(path):
+
     """
     Función que devuelve el texto procesado de una factura.
 
     Input:
         - path(str): Ruta de la factura.pdf
-
+    
     Output:
         - texto_limpio (str)
-
+    
     """
 
     factura = PdfReader(path)
-
+    
     texto_factura = ""
     for pagina in factura.pages:
         texto_factura += pagina.extract_text()
-
-    # Elimino saltos de linea
-    texto_limpio = re.sub(r"\s+", " ", texto_factura).strip()
-
-    # Elimino puntos
-    texto_limpio = re.sub(r"\.+", "", texto_limpio)
-
-    # Elimino espacios multiples
+    
+    # Elimino hiperlinks:
+    texto_limpio = re.sub(r'\b(?:http://|https://|www\.)?\S+(?:-|\s)?\S*?(?:\.com|\.es)\b', "", texto_factura).strip()
+    
+    # Elimino conjuntos de puntos mayores a 1:
+    texto_limpio = re.sub(r'\.{2,}', "", texto_limpio).strip()
+    
+    # Elimino espacios multiples en blanco y saltos de linea:
     texto_limpio = re.sub(r"\s+", " ", texto_limpio)
 
     return texto_limpio
