@@ -74,7 +74,7 @@ def information_extractor(path, model, api_key):
     # Defino el LLM:
     if model == "1":
         llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo",
+            model_name="gpt-4o-mini",
             temperature=0,
             openai_api_key=api_key)
 
